@@ -1,0 +1,15 @@
+﻿codigo_iata,ciudad,provincia,latitud,longitud,es_base
+AEP,Buenos Aires (Aeroparque),CABA,-34.5592,-58.4156,True
+COR,Córdoba,Córdoba,-31.3236,-64.208,True
+MDZ,Mendoza,Mendoza,-32.8317,-68.7929,False
+BRC,San Carlos de Bariloche,Río Negro,-41.1512,-71.1578,False
+IGR,Puerto Iguazú,Misiones,-25.7373,-54.4734,False
+SLA,Salta,Salta,-24.856,-65.4862,False
+TUC,San Miguel de Tucumán,Tucumán,-26.8409,-65.1049,False
+NQN,Neuquén,Neuquén,-38.949,-68.1557,False
+USH,Ushuaia,Tierra del Fuego,-54.8433,-68.2958,False
+FTE,El Calafate,Santa Cruz,-50.2803,-72.0531,False
+MDQ,Mar del Plata,Buenos Aires,-37.9342,-57.5733,False
+CRD,Comodoro Rivadavia,Chubut,-45.7853,-67.4655,False
+REL,Trelew,Chubut,-43.2105,-65.2703,False
+ROS,Rosario,Santa Fe,-32.9036,-60.785,False

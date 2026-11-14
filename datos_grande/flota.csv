@@ -1,0 +1,5 @@
+﻿tipo_avion,cantidad_disponible,asientos,costo_hora_bloque_usd,costo_fijo_diario_usd,tiempo_giro_min,alcance_km
+ATR72,10,70,2600,3500,25,1500
+E190,16,96,3200,5000,35,4000
+B737-800,13,170,5000,8500,45,5400
+B737-MAX8,12,170,4300,11500,45,6500
