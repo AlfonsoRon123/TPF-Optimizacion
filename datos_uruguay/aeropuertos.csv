@@ -1,0 +1,19 @@
+﻿codigo_iata,ciudad,provincia,latitud,longitud,es_base
+AEP,Buenos Aires (Aeroparque),CABA,-34.5592,-58.4156,True
+COR,Córdoba,Córdoba,-31.3236,-64.208,True
+ROS,Rosario,Santa Fe,-32.9036,-60.785,False
+MVD,Montevideo (Carrasco),Canelones (UY),-34.8384,-56.0308,True
+PDP,Punta del Este,Maldonado (UY),-34.8551,-55.0943,False
+STY,Salto,Salto (UY),-31.4385,-57.9853,False
+RVY,Rivera,Rivera (UY),-30.9746,-55.4762,False
+MLZ,Melo,Cerro Largo (UY),-32.3379,-54.2167,False
+ATI,Artigas,Artigas (UY),-30.4007,-56.5079,False
+PDU,Paysandú,Paysandú (UY),-32.3634,-58.0619,False
+TAW,Tacuarembó,Tacuarembó (UY),-31.7489,-55.9258,False
+EZE,Buenos Aires (Ezeiza),Buenos Aires (AR),-34.8222,-58.5358,False
+GRU,São Paulo (Guarulhos),São Paulo (BR),-23.4356,-46.4731,False
+GIG,Río de Janeiro (Galeão),Rio de Janeiro (BR),-22.81,-43.2506,False
+POA,Porto Alegre,Rio Grande do Sul (BR),-29.9944,-51.1714,False
+FLN,Florianópolis,Santa Catarina (BR),-27.6703,-48.5525,False
+CWB,Curitiba,Paraná (BR),-25.5317,-49.1758,False
+ASU,Asunción,Central (PY),-25.24,-57.5191,False

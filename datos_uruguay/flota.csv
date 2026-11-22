@@ -1,0 +1,4 @@
+﻿tipo_avion,cantidad_disponible,asientos,costo_hora_bloque_usd,costo_fijo_diario_usd,tiempo_giro_min,alcance_km
+ATR42-600,8,48,1900,2800,25,1300
+E195-E2,8,132,3600,7000,35,4800
+A320neo,6,174,4500,10500,45,6300

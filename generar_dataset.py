@@ -14,6 +14,7 @@ aproximados por hora de vuelo).
 Uso:
     python generar_dataset.py                    # chico: 102 vuelos, 3 tipos -> ./datos
     python generar_dataset.py --tamano grande    # ~200 vuelos, 4 tipos -> ./datos_grande
+    python generar_dataset.py --tamano uruguay   # 76 vuelos, base Carrasco -> ./datos_uruguay
     python generar_dataset.py --semilla 7 --salida otra_carpeta
     python generar_dataset.py --factor-demanda 1.2   # escenario de demanda +20%
 """
@@ -62,6 +63,22 @@ AEROPUERTOS = [
     ("RCU", "Río Cuarto", "Córdoba", -33.0851, -64.2613, False),
     ("VDM", "Viedma", "Río Negro", -40.8692, -63.0004, False),
     ("AFA", "San Rafael", "Mendoza", -34.5883, -68.4039, False),
+    # dataset Uruguay: aeropuertos uruguayos y destinos regionales (todos en UTC-3)
+    ("MVD", "Montevideo (Carrasco)", "Canelones (UY)", -34.8384, -56.0308, True),
+    ("PDP", "Punta del Este", "Maldonado (UY)", -34.8551, -55.0943, False),
+    ("STY", "Salto", "Salto (UY)", -31.4385, -57.9853, False),
+    ("RVY", "Rivera", "Rivera (UY)", -30.9746, -55.4762, False),
+    ("MLZ", "Melo", "Cerro Largo (UY)", -32.3379, -54.2167, False),
+    ("ATI", "Artigas", "Artigas (UY)", -30.4007, -56.5079, False),
+    ("PDU", "Paysandú", "Paysandú (UY)", -32.3634, -58.0619, False),
+    ("TAW", "Tacuarembó", "Tacuarembó (UY)", -31.7489, -55.9258, False),
+    ("EZE", "Buenos Aires (Ezeiza)", "Buenos Aires (AR)", -34.8222, -58.5358, False),
+    ("GRU", "São Paulo (Guarulhos)", "São Paulo (BR)", -23.4356, -46.4731, False),
+    ("GIG", "Río de Janeiro (Galeão)", "Rio de Janeiro (BR)", -22.8100, -43.2506, False),
+    ("POA", "Porto Alegre", "Rio Grande do Sul (BR)", -29.9944, -51.1714, False),
+    ("FLN", "Florianópolis", "Santa Catarina (BR)", -27.6703, -48.5525, False),
+    ("CWB", "Curitiba", "Paraná (BR)", -25.5317, -49.1758, False),
+    ("ASU", "Asunción", "Central (PY)", -25.2400, -57.5191, False),
 ]
 
 # ---------------------------------------------------------------------------
@@ -160,6 +177,42 @@ TAMANOS = {
     "grande": (FLOTA_GRANDE, RUTAS_GRANDE),
 }
 
+# Dataset Uruguay: aerolínea ficticia con base en Carrasco. Casi no hay cabotaje en Uruguay,
+# así que mezcla rutas cortas al interior (ATR 42) con rutas regionales (Embraer y Airbus),
+# más Punta del Este en temporada de verano.
+FLOTA_URUGUAY = [
+    ("ATR42-600", 8, 48, 1900, 2800, 25, 1300),
+    ("E195-E2", 8, 132, 3600, 7000, 35, 4800),
+    ("A320neo", 6, 174, 4500, 10500, 45, 6300),
+]
+RUTAS_URUGUAY = [
+    # regionales desde Carrasco
+    ("MVD", "AEP", 10, 145, True),
+    ("MVD", "EZE", 2, 130, False),
+    ("MVD", "GRU", 4, 165, True),
+    ("MVD", "GIG", 1, 150, False),
+    ("MVD", "POA", 3, 100, False),
+    ("MVD", "FLN", 1, 110, False),
+    ("MVD", "CWB", 1, 90, False),
+    ("MVD", "ASU", 1, 90, False),
+    ("MVD", "COR", 1, 85, False),
+    ("MVD", "ROS", 1, 60, False),
+    # interior de Uruguay
+    ("MVD", "STY", 2, 40, True),
+    ("MVD", "RVY", 2, 35, False),
+    ("MVD", "PDU", 1, 30, False),
+    ("MVD", "TAW", 1, 25, False),
+    ("MVD", "MLZ", 1, 28, False),
+    ("MVD", "ATI", 1, 22, False),
+    # Punta del Este (temporada de verano)
+    ("PDP", "AEP", 3, 140, False),
+    ("PDP", "GRU", 1, 150, False),
+    ("PDP", "POA", 1, 80, False),
+]
+TAMANOS["uruguay"] = (FLOTA_URUGUAY, RUTAS_URUGUAY)
+PREFIJOS = {"uruguay": "UY"}  # prefijo de id_vuelo (por defecto XX)
+FACTOR_TARIFA = {"uruguay": 1.8}  # rutas internacionales: tarifas más altas
+
 PRIMERA_SALIDA = 6 * 60          # 06:00
 ULTIMA_LLEGADA = 23 * 60 + 55    # 23:55
 VELOCIDAD_KMH = 720              # velocidad media en crucero (aprox.)
@@ -220,10 +273,10 @@ def generar(semilla=42, factor_demanda=1.0, tamano="chico"):
         nonlocal numero
         numero += 2
         demanda = demanda_media * factor_horario(salida) * rng.lognormal(0, 0.15) * factor_demanda
-        demanda = int(np.clip(round(demanda), 30, 240))
-        tarifa = (40 + 0.07 * dist) * rng.uniform(0.9, 1.1)
+        demanda = int(np.clip(round(demanda), 10, 240))
+        tarifa = (40 + 0.07 * dist) * rng.uniform(0.9, 1.1) * FACTOR_TARIFA.get(tamano, 1.0)
         vuelos.append({
-            "id_vuelo": f"XX{numero}",
+            "id_vuelo": f"{PREFIJOS.get(tamano, 'XX')}{numero}",
             "origen": orig,
             "destino": dest,
             "hora_salida": hhmm(salida),
@@ -276,12 +329,13 @@ def main():
     parser.add_argument("--semilla", type=int, default=42)
     parser.add_argument("--factor-demanda", type=float, default=1.0)
     parser.add_argument("--tamano", choices=TAMANOS, default="chico",
-                        help="chico: 102 vuelos y 3 tipos de avión; grande: ~200 vuelos y 4 tipos")
+                        help="chico: 102 vuelos y 3 tipos; grande: 200 vuelos y 4 tipos; "
+                             "uruguay: 76 vuelos con base en Carrasco")
     parser.add_argument("--salida", default=None,
                         help="carpeta de salida (por defecto datos/ o datos_grande/)")
     args = parser.parse_args()
     if args.salida is None:
-        args.salida = "datos" if args.tamano == "chico" else "datos_grande"
+        args.salida = "datos" if args.tamano == "chico" else f"datos_{args.tamano}"
 
     df_aer, df_flota, df_vuelos = generar(args.semilla, args.factor_demanda, args.tamano)
     os.makedirs(args.salida, exist_ok=True)

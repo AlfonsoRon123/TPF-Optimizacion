@@ -46,6 +46,7 @@ tipo faltan**.
 | `.streamlit/config.toml` | colores y opciones de la app |
 | `datos/` | ejemplo chico: 14 aeropuertos, 3 tipos de avión, 102 vuelos |
 | `datos_grande/` | ejemplo grande: 31 aeropuertos, 4 tipos (+ ATR 72), 200 vuelos |
+| `datos_uruguay/` | aerolínea uruguaya ficticia con base en Carrasco: 18 aeropuertos, 3 tipos (ATR 42, E195-E2, A320neo), 76 vuelos; también en un solo Excel (`uruguay.xlsx`) |
 | `generar_dataset.py` | genera los datos de ejemplo (reproducible con semilla) |
 | `verificar_modelo.py` | primera versión del modelo, sin interfaz (quedó como referencia) |
 
@@ -155,6 +156,7 @@ Con demanda +20 % sigue siendo factible (9,4 % sin lugar).
 pip install pandas numpy "pulp<4"
 python generar_dataset.py                          # chico  → datos/
 python generar_dataset.py --tamano grande          # grande → datos_grande/
+python generar_dataset.py --tamano uruguay         # Uruguay → datos_uruguay/
 python generar_dataset.py --tamano grande --factor-demanda 1.2 --salida datos_demanda_alta
 streamlit run app.py                               # la app
 ```
